@@ -1,0 +1,331 @@
+1. Digits - 
+	If division is by 10 - time complexity - log10(N)
+	If division is by 2 - time complexity - log2(N)
+	If division is by 5 - time complexity - log5(N)
+	If division is by 7 - time complexity - log7(N)
+
+2. Divisors -
+	
+	best time complexity - O(sqrt(N))
+
+	************** GCD **************** 
+	gcd(a,b)=gcd(a%b,b)
+	or 
+	gcd(greater,smaller)=gcd(greater%smaller)
+
+	Method->
+	public static int gcd(int greater, int smaller) {
+
+        while (greater > 0 && smaller > 0) {
+            if (greater > smaller) {
+                greater = greater % smaller;
+            } else {
+                smaller = smaller % greater;
+            }
+        }
+        if (greater == 0) {
+            return smaller;
+        }
+        return greater;
+    }
+	time complexity - O(log to the base fyi (MIN(a,b)))
+	not to the base 10, since it depends upon a,b
+
+	************** LCM ****************
+
+	lcm= (a*b) / gcd(a,b)
+
+3. Prime numbers-
+
+	has exactly two factors - 1 and itself
+
+	Best approach - O(sqrt(N))
+
+	for(i=1;i<=Math.sqrt(N);i++)
+	or
+	for(i=1;i*i<=N;i++)
+
+	if(N%i==0){
+		if(N/i!=1) // since 6/6 =1 and factors will repeat
+	}
+
+
+4. Recursion - 
+	When a function calls itself and terminates on a base condition
+
+5. Reversing & Palindrome -
+
+	Reversing(Time complexity - O(N))
+		1. using Loops -
+			swap left and right elements
+			for (int i = 0; i <= a.length / 2; i++) {
+				swap(a, i, a.length - 1 - i);
+			}
+			Time complexity - O(N)
+
+		2. using Recursion -
+			if (left >= a.length / 2) {
+				return;
+			}
+			swap(a, left, a.length-1-left);
+			reverse(a, left+1);
+			
+	Palindrome(Time complexity - O(N))
+		1.using Loops - 
+			public static boolean isPalindromeLoop(String s){
+			System.err.println("input is "+s);
+			for(int i=0;i<s.length()/2;i++){
+				if(s.charAt(i)!=s.charAt(s.length()-1-i)){
+					return false;
+				}
+			}
+			return true;
+			}
+		
+		2. using Recursion -
+			public static boolean isPalindromeRec(String s, int left, int right) {
+			if (left >= right) {
+				return true;
+			}
+			if (s.charAt(left) != s.charAt(right)) {
+				return false;
+			}
+			return isPalindromeRec(s, left + 1, right - 1);
+		}
+6. Hashing -
+	It is done to calculate frequencies of say a digit in an array
+
+	Brute force approach ->
+	public static void hashing(int arr[], int hash[]) {
+
+        for (int i = 0; i < arr.length; i++) {
+            hash[arr[i]] += 1;
+        }
+    }
+	TimeComplexity - O(N)
+	SpaceComplexity - O(k) where k is distinct values stored in the Array
+
+	*TreeMap: Fetching: O(log n) - an ordered map
+	*HashMap (Fetching: O(1))is an example of an unordered map
+
+7. Sorting -
+
+	Selection sort ->
+		[12,2,10,15,20]
+		Set the first element as minimum
+		Compare minimum with the second element. 
+		If the second element is smaller than minimum, assign the second element as minimum.
+		Compare minimum with the third element. Again, if the third element is smaller,
+		then assign minimum to the third element otherwise do nothing. 
+		he process goes on until the last element.
+			for (int i = 0; i < arr.length - 1; i++) {
+            int min = i;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[min]) {
+                    min = j;
+                }
+            }
+            System.out.println("swapping " + i + min);
+            swap(arr, i, min);
+        }
+		TimeComplexity - O(N^2)
+		SpaceComplexity -O(1)
+
+	Bubble sort ->
+		Compare and Swap
+		1. First Iteration (Compare and Swap)
+		Starting from the first index, compare the first and the second elements.
+		If the first element is greater than the second element, they are swapped.
+		Now, compare the second and the third elements. Swap them if they are not in order.
+		The above process goes on until the last element
+
+			 for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swapped = true;
+                    swap(arr, j, j + 1);
+                }
+            }
+            if (!swapped) {
+                return;
+            }
+        }
+		TimeComplexity - O(N^2)
+		Best TimeComplexity - O(N)
+		SpaceComplexity -O(1)
+
+	Insertion sort ->
+			public static void insertionSort(int[] input) {
+			for (int i = 0; i < input.length ; i++) {
+				int j = i;
+				while (j > 0 && input[j] < input[j - 1]) {
+					swap(input, j, j - 1);
+					j--;
+				}
+			}
+		}
+		TimeComplexity - O(N^2)
+		Best TimeComplexity - O(N)
+		SpaceComplexity -O(1)
+
+	Merge sort ->
+		This is based on DIVIDE & CONQUER/MERGE
+		MergeSort(Array, low,high){
+			if(low>=high) return;
+			middle=(low+high)/2;
+			MergeSort(Array,low,middle)
+			MergeSort(Array,middle+1,high)
+			Merge(Array,low,mid,high)
+		}
+			public static void mergeSort(int a[], int low, int high) {
+			if (low >= high) {
+				return;
+			}
+			int mid = (low + high) / 2;
+
+			mergeSort(a, low, mid);
+			mergeSort(a, mid + 1, high);
+			merge(a, low, mid, high);
+
+		}
+
+		public static void merge(int[] a, int low, int mid, int high) {
+			int result[] = new int[high-low+1];
+			int left = low;
+			int right = mid + 1;
+			int index = 0;
+			while (left <= mid && right <= high) {
+				if (a[left] <= a[right]) {
+					result[index] = a[left];
+					left++;
+				} else {
+					result[index] = a[right];
+					right++;
+				}
+				index++;
+			}
+			while (left <= mid) {
+				result[index] = a[left];
+				left++;
+			}
+			while (right <= high) {
+				result[index] = a[right];
+				right++;
+			}
+			for (int i = low; i <= high; i++) {
+				a[i] = result[i - low];
+			}
+		}
+		TimeComplexity-> O(N*log N to base 2)
+		SpaceComplexity-> O(N)
+
+	Quick sort ->
+		TimeComplexity-> O(N*log N to base 2)
+		SpaceComplexity-> O(N)
+
+
+8. Arrays ->
+
+	LargestElement ->
+		1. Brute force approach -> sort & show the last element(which will be the largest element)
+			TimeComplexity - nlogn+n;
+		2. Optimal approach -> loop the whole array and compare the largest element
+				public static int largestElement(int a[]) {
+					int largest = a[0];
+					for (int i = 1; i < a.length; i++) {
+						if (a[i] > largest) {
+							largest = a[i];
+						}
+					}
+					return largest;
+				}
+				TimeComplexity - O(N);
+
+	2nd LargestElement -> 
+		1. Brute force approach -> sort & show the 2nd last element(which will be the 2nd largest element)
+			TimeComplexity - nlogn+n;
+		2. Better approach -> loop the whole array and first find the largest element and then loop and check for 2nd largest element
+			public static int secondLargest(int a[]) {
+				int sLargest = -1;
+				int largest = a[0];
+
+				for (int i = 0; i < a.length; i++) {
+					if (a[i] > largest) {
+						largest = a[i];
+					}
+				}
+				for (int i = 0; i < a.length; i++) {
+					if (a[i] > sLargest && a[i] != largest) {
+						sLargest = a[i];
+					}
+				}
+				return sLargest;
+			}
+			TimeComplexity - O(N+N)= O(2N)
+
+		3. Better approach -> loop the whole array and first find the largest element and then loop and check for 2nd largest element
+		public static int secondLargest(int a[]) {
+			int sLargest = -1;
+			int largest = a[0];
+
+			for (int i = 0; i < a.length; i++) {
+            if (a[i] > largest) {
+                sLargest = largest;
+                largest = a[i];
+            } else if (a[i] < largest && a[i] > sLargest) {
+                sLargest = a[i];
+            }
+        }
+			return sLargest;
+		}
+		TimeComplexity - O(N+N)= O(N)
+
+	Array is sorted or not -> 
+		public static boolean isArraySorted(int a[]) {
+			for (int i = 0; i < a.length - 1; i++) {
+				if (a[i + 1] < a[i]) {
+					return false;
+				}
+			}
+			return true;
+		}
+		TimeComplexity -> O(N)
+
+	Remove duplicates -> 
+	 *Change the array nums such that the first k elements of nums contain the unique elements in 
+	 the order they were present in nums initially. The remaining elements of nums are not important 
+	 as well as the size of nums.
+
+		Brute force approach ->loop and store each element in a Set(which contains unique elements), then
+		loop through the Set and store the values back in the array
+		public static int removeDuplicates(int a[]) {
+			int k = 0;
+			HashSet<Integer> set = new HashSet<>();
+			for (int i = 0; i < a.length; i++) {
+				set.add(a[i]);
+			}
+
+			int i = 0;
+			for (Integer integer : set) {
+				a[i] = integer;
+				i++;
+			}
+			k = set.size();
+			return k;
+			}
+			TimeComplexity -> O(N+N)=O(N)
+			SpaceComplexity -> O(N)
+
+		Optimal approach ->
+			public static int removeDuplicates2pointer(int a[]) {
+			int i = 0;
+			for (int j = 1; j < a.length; j++) {
+				if (a[j] != a[i]) {
+					a[i + 1] = a[j];
+					i++;
+				}
+			}
+			return i + 1;
+		}
+		TimeComplexity -> O(N)
+		SpaceComplexity -> O(1)
