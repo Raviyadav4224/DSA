@@ -296,25 +296,26 @@
 	 the order they were present in nums initially. The remaining elements of nums are not important 
 	 as well as the size of nums.
 
-		Brute force approach ->loop and store each element in a Set(which contains unique elements), then
-		loop through the Set and store the values back in the array
-		public static int removeDuplicates(int a[]) {
-			int k = 0;
-			HashSet<Integer> set = new HashSet<>();
-			for (int i = 0; i < a.length; i++) {
-				set.add(a[i]);
-			}
+		Brute force approach ->
+			loop and store each element in a Set(which contains unique elements), then
+			loop through the Set and store the values back in the array
+			public static int removeDuplicates(int a[]) {
+				int k = 0;
+				HashSet<Integer> set = new HashSet<>();
+				for (int i = 0; i < a.length; i++) {
+					set.add(a[i]);
+				}
 
-			int i = 0;
-			for (Integer integer : set) {
-				a[i] = integer;
-				i++;
-			}
-			k = set.size();
-			return k;
-			}
-			TimeComplexity -> O(N+N)=O(N)
-			SpaceComplexity -> O(N)
+				int i = 0;
+				for (Integer integer : set) {
+					a[i] = integer;
+					i++;
+				}
+				k = set.size();
+				return k;
+				}
+				TimeComplexity -> O(N+N)=O(N)
+				SpaceComplexity -> O(N)
 
 		Optimal approach ->
 			public static int removeDuplicates2pointer(int a[]) {
@@ -326,6 +327,106 @@
 				}
 			}
 			return i + 1;
+			}
+			TimeComplexity -> O(N)
+			SpaceComplexity -> O(1)
+
+	Rotate Array ->
+		Left rotate by one place ->
+			public static void leftRotateArrayByOne(int arr[]) {
+				int temp = arr[0];
+				for (int i = 1; i < arr.length; i++) {
+					arr[i - 1] = arr[i];
+				}
+				arr[arr.length - 1] = temp;
+			}
+			TimeComplexity - > O(N)
+			SpaceComplexity -> O(1)
+			
+		Left rotate by K places ->
+			public static void leftRotateByKPlaces(int arr[], int k) {
+				int temp[] = new int[k];
+				k = k % arr.length;
+
+				for (int i = 0; i < k; i++) {
+					temp[i] = arr[i];
+				}
+
+				for (int i = k; i < arr.length; i++) {
+					arr[i - k] = arr[i];
+				}
+
+				for (int i = arr.length - k; i < arr.length; i++) {
+					arr[i] = temp[i - (arr.length - k)];
+				}
+			}
+			TimeComplexity -> O(N-K)+O(K)+O(K) => O(N+K)
+			SpaceComplexity -> O(K)
+
+			Another approach -> using Reversing
+
+			reverse(arr,arr+d)
+			reverse(arr+d,arr+n)
+			reverse(arr,arr+n)
+
+			TimeComplexity - O(d)+O(n-d)+O(n) => O(2n)
+			SpaceComplexity -> O(1)
+
+	Move zeros to the end of array ->
+
+		Brute force approach -
+			Iterate and store all the non zero elements in temp array
+			then store back by overwriting in the original array and fill rest with zeros
+				public static void moveZeroesToTheEnd(int arr[]) {
+					List<Integer> temp = new ArrayList<>();
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i] != 0) {
+							temp.add(arr[i]);
+						}
+					}
+					for (int i = 0; i < arr.length; i++) {
+						if (i < temp.size()) {
+							arr[i] = temp.get(i);
+						} else {
+							arr[i] = 0;
+						}
+					}
+				}
+				TimeComplexity -> O(n)+O(n)= O(2n)
+				SpaceComplexity -> O(N)
+
+		Optimal approach -> Two pointer approach
+			public static void moveZeroesToTheEnd2Pointer(int arr[]) {
+				int j = -1;
+				for (int index = 0; index < arr.length; index++) {
+					if (arr[index] == 0) {
+						j = index;
+						break;
+					}
+				}
+				if (j == -1) {
+					System.out.println("No zeroes are there in the Array");
+					return;
+				}
+				for (int i = j + 1; i < arr.length; i++) {
+					if (arr[i] != 0) {
+						swap(arr, j, i);
+						j++;
+					}
+				}
+			}
+			TimeComplexity -> O(x)+O(n-x) => O(n)
+			SpaceComplexity -> O(1)
+
+	Linear Search ->
+		 public static int linearSearch(int arr[], int num) {
+			int pos = -1;
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i] == num) {
+					return pos = i;
+				}
+			}
+			return pos;
 		}
-		TimeComplexity -> O(N)
+		TimeComplexity -> O(n)
 		SpaceComplexity -> O(1)
