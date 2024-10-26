@@ -225,475 +225,822 @@
 
 
 8. Arrays ->
+	1. Easy ->
+		LargestElement ->
+			1. Brute force approach -> sort & show the last element(which will be the largest element)
+				TimeComplexity - nlogn+n;
+			2. Optimal approach -> loop the whole array and compare the largest element
+					public static int largestElement(int a[]) {
+						int largest = a[0];
+						for (int i = 1; i < a.length; i++) {
+							if (a[i] > largest) {
+								largest = a[i];
+							}
+						}
+						return largest;
+					}
+					TimeComplexity - O(N);
 
-	LargestElement ->
-		1. Brute force approach -> sort & show the last element(which will be the largest element)
-			TimeComplexity - nlogn+n;
-		2. Optimal approach -> loop the whole array and compare the largest element
-				public static int largestElement(int a[]) {
+		2nd LargestElement -> 
+			1. Brute force approach -> sort & show the 2nd last element(which will be the 2nd largest element)
+				TimeComplexity - nlogn+n;
+			2. Better approach -> loop the whole array and first find the largest element and then loop and check for 2nd largest element
+				public static int secondLargest(int a[]) {
+					int sLargest = -1;
 					int largest = a[0];
-					for (int i = 1; i < a.length; i++) {
+
+					for (int i = 0; i < a.length; i++) {
 						if (a[i] > largest) {
 							largest = a[i];
 						}
 					}
-					return largest;
+					for (int i = 0; i < a.length; i++) {
+						if (a[i] > sLargest && a[i] != largest) {
+							sLargest = a[i];
+						}
+					}
+					return sLargest;
 				}
-				TimeComplexity - O(N);
+				TimeComplexity - O(N+N)= O(2N)
 
-	2nd LargestElement -> 
-		1. Brute force approach -> sort & show the 2nd last element(which will be the 2nd largest element)
-			TimeComplexity - nlogn+n;
-		2. Better approach -> loop the whole array and first find the largest element and then loop and check for 2nd largest element
+			3. Optimal approach -> loop the whole array and first find the largest element and check for 2nd largest element
 			public static int secondLargest(int a[]) {
 				int sLargest = -1;
 				int largest = a[0];
 
 				for (int i = 0; i < a.length; i++) {
-					if (a[i] > largest) {
-						largest = a[i];
-					}
+				if (a[i] > largest) {
+					sLargest = largest;
+					largest = a[i];
+				} else if (a[i] < largest && a[i] > sLargest) {
+					sLargest = a[i];
 				}
-				for (int i = 0; i < a.length; i++) {
-					if (a[i] > sLargest && a[i] != largest) {
-						sLargest = a[i];
-					}
-				}
+			}
 				return sLargest;
 			}
-			TimeComplexity - O(N+N)= O(2N)
+			TimeComplexity - O(N+N)= O(N)
 
-		3. Optimal approach -> loop the whole array and first find the largest element and check for 2nd largest element
-		public static int secondLargest(int a[]) {
-			int sLargest = -1;
-			int largest = a[0];
-
-			for (int i = 0; i < a.length; i++) {
-            if (a[i] > largest) {
-                sLargest = largest;
-                largest = a[i];
-            } else if (a[i] < largest && a[i] > sLargest) {
-                sLargest = a[i];
-            }
-        }
-			return sLargest;
-		}
-		TimeComplexity - O(N+N)= O(N)
-
-	Array is sorted or not -> 
-		public static boolean isArraySorted(int a[]) {
-			for (int i = 0; i < a.length - 1; i++) {
-				if (a[i + 1] < a[i]) {
-					return false;
+		Array is sorted or not -> 
+			public static boolean isArraySorted(int a[]) {
+				for (int i = 0; i < a.length - 1; i++) {
+					if (a[i + 1] < a[i]) {
+						return false;
+					}
 				}
-			}
-			return true;
-		}
-		TimeComplexity -> O(N)
-
-	Remove duplicates -> 
-	 *Change the array nums such that the first k elements of nums contain the unique elements in 
-	 the order they were present in nums initially. The remaining elements of nums are not important 
-	 as well as the size of nums.
-
-		1. Brute force approach ->
-			loop and store each element in a Set(which contains unique elements), then
-			loop through the Set and store the values back in the array
-			public static int removeDuplicates(int a[]) {
-				int k = 0;
-				HashSet<Integer> set = new HashSet<>();
-				for (int i = 0; i < a.length; i++) {
-					set.add(a[i]);
-				}
-
-				int i = 0;
-				for (Integer integer : set) {
-					a[i] = integer;
-					i++;
-				}
-				k = set.size();
-				return k;
-				}
-				TimeComplexity -> O(N+N)=O(N)
-				SpaceComplexity -> O(N)
-
-		2. Optimal approach -> 
-			Two pointer approach
-			public static int removeDuplicates2pointer(int a[]) {
-			int i = 0;
-			for (int j = 1; j < a.length; j++) {
-				if (a[j] != a[i]) {
-					a[i + 1] = a[j];
-					i++;
-				}
-			}
-			return i + 1;
+				return true;
 			}
 			TimeComplexity -> O(N)
-			SpaceComplexity -> O(1)
 
-	Rotate Array ->
-		Left rotate by one place ->
-			public static void leftRotateArrayByOne(int arr[]) {
-				int temp = arr[0];
-				for (int i = 1; i < arr.length; i++) {
-					arr[i - 1] = arr[i];
+		Remove duplicates -> 
+		*Change the array nums such that the first k elements of nums contain the unique elements in 
+		the order they were present in nums initially. The remaining elements of nums are not important 
+		as well as the size of nums.
+
+			1. Brute force approach ->
+				loop and store each element in a Set(which contains unique elements), then
+				loop through the Set and store the values back in the array
+				public static int removeDuplicates(int a[]) {
+					int k = 0;
+					HashSet<Integer> set = new HashSet<>();
+					for (int i = 0; i < a.length; i++) {
+						set.add(a[i]);
+					}
+
+					int i = 0;
+					for (Integer integer : set) {
+						a[i] = integer;
+						i++;
+					}
+					k = set.size();
+					return k;
+					}
+					TimeComplexity -> O(N+N)=O(N)
+					SpaceComplexity -> O(N)
+
+			2. Optimal approach -> 
+				Two pointer approach
+				public static int removeDuplicates2pointer(int a[]) {
+				int i = 0;
+				for (int j = 1; j < a.length; j++) {
+					if (a[j] != a[i]) {
+						a[i + 1] = a[j];
+						i++;
+					}
 				}
-				arr[arr.length - 1] = temp;
-			}
-			TimeComplexity - > O(N)
-			SpaceComplexity -> O(1)
-			
-		Left rotate by K places ->
-			public static void leftRotateByKPlaces(int arr[], int k) {
-				int temp[] = new int[k];
-				k = k % arr.length;
-
-				for (int i = 0; i < k; i++) {
-					temp[i] = arr[i];
+				return i + 1;
 				}
+				TimeComplexity -> O(N)
+				SpaceComplexity -> O(1)
 
-				for (int i = k; i < arr.length; i++) {
-					arr[i - k] = arr[i];
+		Rotate Array ->
+			Left rotate by one place ->
+				public static void leftRotateArrayByOne(int arr[]) {
+					int temp = arr[0];
+					for (int i = 1; i < arr.length; i++) {
+						arr[i - 1] = arr[i];
+					}
+					arr[arr.length - 1] = temp;
 				}
+				TimeComplexity - > O(N)
+				SpaceComplexity -> O(1)
+				
+			Left rotate by K places ->
+				public static void leftRotateByKPlaces(int arr[], int k) {
+					int temp[] = new int[k];
+					k = k % arr.length;
 
-				for (int i = arr.length - k; i < arr.length; i++) {
-					arr[i] = temp[i - (arr.length - k)];
+					for (int i = 0; i < k; i++) {
+						temp[i] = arr[i];
+					}
+
+					for (int i = k; i < arr.length; i++) {
+						arr[i - k] = arr[i];
+					}
+
+					for (int i = arr.length - k; i < arr.length; i++) {
+						arr[i] = temp[i - (arr.length - k)];
+					}
 				}
-			}
-			TimeComplexity -> O(N-K)+O(K)+O(K) => O(N+K)
-			SpaceComplexity -> O(K)
+				TimeComplexity -> O(N-K)+O(K)+O(K) => O(N+K)
+				SpaceComplexity -> O(K)
 
-			Another approach -> using Reversing
+				Another approach -> using Reversing
 
-			reverse(arr,arr+d)
-			reverse(arr+d,arr+n)
-			reverse(arr,arr+n)
+				reverse(arr,arr+d)
+				reverse(arr+d,arr+n)
+				reverse(arr,arr+n)
 
-			TimeComplexity - O(d)+O(n-d)+O(n) => O(2n)
-			SpaceComplexity -> O(1)
+				TimeComplexity - O(d)+O(n-d)+O(n) => O(2n)
+				SpaceComplexity -> O(1)
 
-	Move zeros to the end of array ->
+		Move zeros to the end of array ->
 
-		Brute force approach -
-			Iterate and store all the non zero elements in temp array
-			then store back by overwriting in the original array and fill rest with zeros
-				public static void moveZeroesToTheEnd(int arr[]) {
-					List<Integer> temp = new ArrayList<>();
-					for (int i = 0; i < arr.length; i++) {
+			1. Brute force approach -
+				Iterate and store all the non zero elements in temp array
+				then store back by overwriting in the original array and fill rest with zeros
+					public static void moveZeroesToTheEnd(int arr[]) {
+						List<Integer> temp = new ArrayList<>();
+						for (int i = 0; i < arr.length; i++) {
+							if (arr[i] != 0) {
+								temp.add(arr[i]);
+							}
+						}
+						for (int i = 0; i < arr.length; i++) {
+							if (i < temp.size()) {
+								arr[i] = temp.get(i);
+							} else {
+								arr[i] = 0;
+							}
+						}
+					}
+					TimeComplexity -> O(n)+O(n)= O(2n)
+					SpaceComplexity -> O(N)
+
+			2. Optimal approach -> Two pointer approach
+				public static void moveZeroesToTheEnd2Pointer(int arr[]) {
+					int j = -1;
+					for (int index = 0; index < arr.length; index++) {
+						if (arr[index] == 0) {
+							j = index;
+							break;
+						}
+					}
+					if (j == -1) {
+						System.out.println("No zeroes are there in the Array");
+						return;
+					}
+					for (int i = j + 1; i < arr.length; i++) {
 						if (arr[i] != 0) {
-							temp.add(arr[i]);
-						}
-					}
-					for (int i = 0; i < arr.length; i++) {
-						if (i < temp.size()) {
-							arr[i] = temp.get(i);
-						} else {
-							arr[i] = 0;
-						}
-					}
-				}
-				TimeComplexity -> O(n)+O(n)= O(2n)
-				SpaceComplexity -> O(N)
-
-		Optimal approach -> Two pointer approach
-			public static void moveZeroesToTheEnd2Pointer(int arr[]) {
-				int j = -1;
-				for (int index = 0; index < arr.length; index++) {
-					if (arr[index] == 0) {
-						j = index;
-						break;
-					}
-				}
-				if (j == -1) {
-					System.out.println("No zeroes are there in the Array");
-					return;
-				}
-				for (int i = j + 1; i < arr.length; i++) {
-					if (arr[i] != 0) {
-						swap(arr, j, i);
-						j++;
-					}
-				}
-			}
-			TimeComplexity -> O(x)+O(n-x) => O(n)
-			SpaceComplexity -> O(1)
-
-	Linear Search ->
-		 public static int linearSearch(int arr[], int num) {
-			int pos = -1;
-			for (int i = 0; i < arr.length; i++) {
-				if (arr[i] == num) {
-					return pos = i;
-				}
-			}
-			return pos;
-		}
-		TimeComplexity -> O(n)
-		SpaceComplexity -> O(1)
-	
-	Union of two sorted Arrays -> 
-		Brute force approach ->
-			Loop through both the arrays and store in SET which contains unique elements
-			TimeComplexity -> O(n1)+O(n2)+O(n1+n2)= O(2*(n1+n2))
-			SpaceComplexity -> O(n1+n2)
-		
-		Optimal approach ->
-			Two pointer approach
-			TimeComplexity -> O(n1+n2)
-			SpaceComplexity -> O(n1+n2) || O(1)
-			public static List<Integer> union2pointer(int arr1[], int arr2[]) {
-				List<Integer> union = new ArrayList<>();
-				int n1 = arr1.length;
-				int n2 = arr2.length;
-
-				int i = 0, j = 0;
-
-				while (i < n1 && j < n2) {
-					if (arr1[i] <= arr2[j]) {
-						if (union.size() == 0 || union.get(union.size() - 1) != arr1[i]) {
-							union.add(arr1[i]);
-							i++;
-						}
-					} else {
-						if (union.size() == 0 || union.get(union.size() - 1) != arr2[j]) {
-							union.add(arr2[j]);
+							swap(arr, j, i);
 							j++;
 						}
 					}
 				}
+				TimeComplexity -> O(x)+O(n-x) => O(n)
+				SpaceComplexity -> O(1)
 
-				return union;
-			}
-
-	Intersection of two sorted Array ->
-
-		TimeComplexity ->O(n1+n2)
-		SpaceComplexity ->O(n1+n2)
-		Optimal approach ->
-			Two pointer approach
-			public static List<Integer> intersection2pointer(int arr1[], int arr2[]) {
-				List<Integer> intersection = new ArrayList<>();
-				int n1 = arr1.length;
-				int n2 = arr2.length;
-
-				int i = 0, j = 0;
-
-				while (i < n1 && j < n2) {
-					if (arr1[i] > arr2[j]) {
-						j++;
-					} else if (arr1[i] < arr2[j]) {
-						i++;
-					} else {
-						intersection.add(arr1[i]);
-						i++;
-						j++;
+		Linear Search ->
+			public static int linearSearch(int arr[], int num) {
+				int pos = -1;
+				for (int i = 0; i < arr.length; i++) {
+					if (arr[i] == num) {
+						return pos = i;
 					}
 				}
-
-				return intersection;
+				return pos;
 			}
-	
-	Missing Number ->
-		For N numbers
-		Brute force approach ->
-			check every number and check whether present or not using Linear search 
-			public static int missingNumber(int arr[], int n) {
-				for (int i = 1; i <= n; i++) {
-					boolean flag = false;
-					for (int j = 0; j < arr.length; j++) {
-						if (arr[j] == i) {
-							flag = true;
-							break;
-						}
-					}
-					if (flag == false) {
-						return i;
-					}
-				}
-				return 0;
-			}
-			TimeComplexity ->O(N^2)
+			TimeComplexity -> O(n)
 			SpaceComplexity -> O(1)
-
-		Better approach ->
-			using Hashing
-			TimeComplexity -> O(N)+O(N) = O(2N)
-			SpaceComplexity -> O(N)
-			public static int missingNumberHashing(int arr[], int n) {
-				int hash[] = new int[n + 1];
-
-				for (int i = 0; i < arr.length; i++) {
-					hash[arr[i]] = hash[arr[i]] + 1;
-				}
-				for (int i = 1; i < hash.length; i++) {
-					if (hash[i] == 0) {
-						return i;
-					}
-				}
-				return 0;
-			}
-
-		Optimal approach ->
-
-			1. By finding Summation 
-				TimeComplexity -> O(N)
-				SpaceComplexity -> O(1)
-				public static int missingNumberSummation(int arr[], int n) {
-
-					int actualSum = (n * (n + 1)) / 2;
-					int sum = 0;
-					for (int i = 0; i < arr.length; i++) {
-						sum = sum + arr[i];
-					}
-
-					return actualSum - sum;
-				}
-			
-			2. using XOR ->
-				5 xor 5 => 5
-				AnyNumber xor 0=> AnyNumber
-				TimeComplexity -> O(N)
-				SpaceComplexity -> O(1)
-					public static int missingNumberXOR(int arr[], int n) {
-						int xor1 = 0;
-						int xor2 = 0;
-						for (int i = 0; i < n - 1; i++) {
-							xor1 = xor1 ^ (i + 1);
-							xor2 = xor2 ^ arr[i];
-						}
-						xor1 = xor1 ^ n;
-						return xor1 ^ xor2;
-					}
-
-	Maximum consecutive ones ->
-
-		Optimal approach ->
-			public static void maximumConsecutiveOnes(int arr[]) {
-				int count = 0;
-				int max = 0;
-				for (int i = 0; i < arr.length; i++) {
-					if (arr[i] == 1) {
-						count++;
-						max = Math.max(max, count);
-					} else {
-						count = 0;
-					}
-				}
-				System.out.println("consecutive ones are " + max);
-			}
-	
-	Find the numbers that appear ones and others twice ->
-		* Here all other numbers appears twice except one
-		Brute force approach ->
-			Same as finding missing number
-			TimeComplexity -> O(N^2)
-
-		Better approach ->
-			using hashing
 		
-		Optimal approach ->
-			using xor
+		Union of two SORTED Arrays -> 
+			Brute force approach ->
+				Loop through both the arrays and store in SET which contains unique elements
+				TimeComplexity -> O(n1)+O(n2)+O(n1+n2)= O(2*(n1+n2))
+				SpaceComplexity -> O(n1+n2)
+			
+			Optimal approach ->
+				Two pointer approach
+				TimeComplexity -> O(n1+n2)
+				SpaceComplexity -> O(n1+n2) || O(1)
+				public static void unionTwoArrays(int arr1[], int arr2[]) {
 
-	Longest Subarray with given sum K ->
+					int i = 0, j = 0;
+					List<Integer> union = new ArrayList<>();
 
-		Brute force approach -> 
-			Generate all subarrays and then find sum 
-			Generate subarray ->
-				public static void LongestSubArray(int arr[], int d) {
-					int longestLength = 0;
-					for (int i = 0; i < arr.length; i++) {
-						for (int j = i; j < arr.length; j++) {
-							// Summation
-							int sum = 0;
-							for (int k = i; k <= j; k++) {
-								sum = sum + arr[k];
+					while (i < arr1.length && j < arr2.length) {
+
+						if (arr1[i] <= arr2[j]) {
+							if (union.size() == 0 || union.get(union.size() - 1) != arr1[i]) {
+								union.add(arr1[i]);
 							}
-
-							if (sum == d) {
-								longestLength = Math.max(longestLength, j - i + 1);
+							i++;
+						} else {
+							if (union.size() == 0 || union.get(union.size() - 1) != arr2[j]) {
+								union.add(arr2[j]);
 							}
+							j++;
 						}
 					}
-					System.out.println(longestLength);
+
+					while (i < arr1.length) {
+						if (union.size() == 0 || union.get(union.size() - 1) != arr1[i]) {
+							union.add(arr1[i]);
+						}
+						i++;
+					}
+					while (j < arr2.length) {
+						if (union.size() == 0 || union.get(union.size() - 1) != arr2[j]) {
+							union.add(arr2[j]);
+						}
+						j++;
+					}
+					System.out.println(union);
+					return union;
 				}
-				TimeComplexity -> O(N^3)
+
+		Intersection of two SORTED Array ->
+
+			TimeComplexity ->O(n1+n2)
+			SpaceComplexity ->O(n1+n2)
+			Optimal approach ->
+				Two pointer approach
+				public static List<Integer> intersection2pointer(int arr1[], int arr2[]) {
+					List<Integer> intersection = new ArrayList<>();
+					int n1 = arr1.length;
+					int n2 = arr2.length;
+
+					int i = 0, j = 0;
+
+					while (i < n1 && j < n2) {
+						if (arr1[i] > arr2[j]) {
+							j++;
+						} else if (arr1[i] < arr2[j]) {
+							i++;
+						} else {
+							intersection.add(arr1[i]);
+							i++;
+							j++;
+						}
+					}
+
+					return intersection;
+				}
+		
+		Missing Number ->
+			For N numbers
+			Brute force approach ->
+				check every number and check whether present or not using Linear search 
+				public static int missingNumber(int arr[], int n) {
+					for (int i = 1; i <= n; i++) {
+						boolean flag = false;
+						for (int j = 0; j < arr.length; j++) {
+							if (arr[j] == i) {
+								flag = true;
+								break;
+							}
+						}
+						if (flag == false) {
+							return i;
+						}
+					}
+					return 0;
+				}
+				TimeComplexity ->O(N^2)
 				SpaceComplexity -> O(1)
 
-			OR
+			Better approach ->
+				using Hashing
+				TimeComplexity -> O(N)+O(N) = O(2N)
+				SpaceComplexity -> O(N)
+				public static int missingNumberHashing(int arr[], int n) {
+					int hash[] = new int[n + 1];
 
-			public static void LongestSubArray(int arr[], int d) {
-					int longestLength = 0;
 					for (int i = 0; i < arr.length; i++) {
-							int sum = 0;
-						for (int j = i; j < arr.length; j++) {
-							if (sum == d) {
-								longestLength = Math.max(longestLength, j - i + 1);
-							}
+						hash[arr[i]] = hash[arr[i]] + 1;
+					}
+					for (int i = 1; i < hash.length; i++) {
+						if (hash[i] == 0) {
+							return i;
 						}
 					}
-					System.out.println(longestLength);
+					return 0;
 				}
+
+			Optimal approach ->
+
+				1. By finding Summation 
+					TimeComplexity -> O(N)
+					SpaceComplexity -> O(1)
+					public static int missingNumberSummation(int arr[], int n) {
+
+						int actualSum = (n * (n + 1)) / 2;
+						int sum = 0;
+						for (int i = 0; i < arr.length; i++) {
+							sum = sum + arr[i];
+						}
+
+						return actualSum - sum;
+					}
+				
+				2. using XOR ->
+					5 xor 5 => 5
+					AnyNumber xor 0=> AnyNumber
+					TimeComplexity -> O(N)
+					SpaceComplexity -> O(1)
+						public static int missingNumberXOR(int arr[], int n) {
+							int xor1 = 0;
+							int xor2 = 0;
+							for (int i = 0; i < n - 1; i++) {
+								xor1 = xor1 ^ (i + 1);
+								xor2 = xor2 ^ arr[i];
+							}
+							xor1 = xor1 ^ n;
+							return xor1 ^ xor2;
+						}
+
+		Maximum consecutive ones ->
+
+			Optimal approach ->
+				public static void maximumConsecutiveOnes(int arr[]) {
+					int count = 0;
+					int max = 0;
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i] == 1) {
+							count++;
+							max = Math.max(max, count);
+						} else {
+							count = 0;
+						}
+					}
+					System.out.println("consecutive ones are " + max);
+				}
+		
+		Find the numbers that appear ones and others twice ->
+			* Here all other numbers appears twice except one
+			Brute force approach ->
+				Same as finding missing number
+				TimeComplexity -> O(N^2)
+
+			Better approach ->
+				using hashing
+			
+			Optimal approach ->
+				using xor
+
+		Longest Subarray with given sum K ->
+
+			1. Brute force approach -> 
+				Generate all subarrays and then find sum 
+				Generate subarray ->
+					public static void LongestSubArray(int arr[], int d) {
+						int longestLength = 0;
+						for (int i = 0; i < arr.length; i++) {
+							for (int j = i; j < arr.length; j++) {
+								// Summation
+								int sum = 0;
+								for (int k = i; k <= j; k++) {
+									sum = sum + arr[k];
+								}
+
+								if (sum == d) {
+									longestLength = Math.max(longestLength, j - i + 1);
+								}
+							}
+						}
+						System.out.println(longestLength);
+					}
+					TimeComplexity -> O(N^3)
+					SpaceComplexity -> O(1)
+
+				OR
+
+				public static void LongestSubArray(int arr[], int d) {
+						int longestLength = 0;
+						for (int i = 0; i < arr.length; i++) {
+								int sum = 0;
+							for (int j = i; j < arr.length; j++) {
+								if (sum == d) {
+									longestLength = Math.max(longestLength, j - i + 1);
+								}
+							}
+						}
+						System.out.println(longestLength);
+					}
+					TimeComplexity -> O(N^2)
+					SpaceComplexity -> O(1)
+					
+			2. Better approach ->
+				using Hashing
+					1. We will sum from zero index to the end and store it in HashMap
+					2. If sum is equal to K then maxLength would be i+1
+					3. Remaining would be sum-K
+					4. If remaining is already present in HashMap we need to check whether it is max or not
+						newLength = i- HashMap(remaining)
+						maxLength=Max(maxLength,newLength)
+
+					public static int LongestSubArrayUsingHashing(int arr[], int k) {
+
+						HashMap<Integer, Integer> prefixSum = new HashMap<Integer, Integer>();
+						int sum = 0;
+						int maxLength = 0;
+						for (int i = 0; i < arr.length; i++) {
+							sum = sum + arr[i];
+
+							if (sum == k) {
+								maxLength = i + 1;
+							}
+
+							int remaining = sum - k;
+							if (prefixSum.containsKey(remaining)) {
+								int len = i - prefixSum.get(remaining);
+								maxLength = Math.max(maxLength, len);
+							}
+
+							if (!prefixSum.containsKey(sum)) {
+								prefixSum.put(sum, i);
+							}
+						}
+						return maxLength;
+					}
+					TimeComplexity -> O(N)
+					SpaceComplexity -> O(N)
+				
+			3. Optimal approach ->
+				Two pointer approach
+					public static int LongestSubArrayUsing2Pointer(int arr[], int k) {
+						int sum = 0;
+						int maxLength = 0;
+						int i = 0;
+						int j = 0;
+						while (j < arr.length) {
+							sum = sum + arr[j];
+							if (sum == k) {
+								maxLength = Math.max(maxLength, j - i + 1);
+							}
+							while (sum > k && i <= j) {
+								sum = sum - arr[i];
+								i++;
+							}
+							j++;
+						}
+
+						return maxLength;
+					}
+					TimeComplexity -> O(n)
+					SpaceComplexity -> O(1)
+
+	2. Medium ->
+
+		2Sum Problem ->
+			Brute force approach -> Loop and check using every element
 				TimeComplexity -> O(N^2)
 				SpaceComplexity -> O(1)
-				
-		Better approach ->
-			using Hashing
-				1. We will sum from zero index to the end and store it in HashMap
-				2. If sum is equal to K then maxLength would be i+1
-				3. Remaining would be sum-K
-				4. If remaining is already present in HashMap we need to check whether it is max or not
-					newLength = i- HashMap(remaining)
-					maxLength=Max(maxLength,newLength)
+				public static boolean TwoSumEqualToTargetK(int arr1[], int target) {
+					boolean isEqualToTarget = false;
+					for (int i = 0; i < arr1.length; i++) {
 
-				public static int LongestSubArrayUsingHashing(int arr[], int k) {
-
-					HashMap<Integer, Integer> prefixSum = new HashMap<Integer, Integer>();
-					int sum = 0;
-					int maxLength = 0;
-					for (int i = 0; i < arr.length; i++) {
-						sum = sum + arr[i];
-
-						if (sum == k) {
-							maxLength = i + 1;
-						}
-
-						int remaining = sum - k;
-						if (prefixSum.containsKey(remaining)) {
-							int len = i - prefixSum.get(remaining);
-							maxLength = Math.max(maxLength, len);
-						}
-
-						if (!prefixSum.containsKey(sum)) {
-							prefixSum.put(sum, i);
+						// for (int j = 0; j < arr1.length; j++) {
+						//     if (i == j)
+						//         continue;
+						//     if (arr1[i] + arr1[j] == target) {
+						//         isEqualToTarget = true;
+						//         System.out.println("index are " + i + " " + j);
+						//     }
+						// }
+						for (int j = i+1; j < arr1.length; j++) {
+							if (arr1[i] + arr1[j] == target) {
+								isEqualToTarget = true;
+								System.out.println("index are " + i + " " + j);
+							}
 						}
 					}
-					return maxLength;
+					return isEqualToTarget;
 				}
+			
+			Better approach -> using Hashing
 				TimeComplexity -> O(N)
 				SpaceComplexity -> O(N)
-			
-		Optimal approach ->
-			Two pointer approach
-				public static int LongestSubArrayUsing2Pointer(int arr[], int k) {
-					int sum = 0;
-					int maxLength = 0;
-					int i = 0;
-					int j = 0;
-					while (j < arr.length) {
-						sum = sum + arr[j];
-						if (sum == k) {
-							maxLength = Math.max(maxLength, j - i + 1);
+				public static void TwoSumEqualToTargetKUsingHashing(int arr[], int target) {
+					HashMap<Integer, Integer> sum = new HashMap<>();
+					int ans[] = { -1, -1 };
+					for (int i = 0; i < arr.length; i++) {
+						int required = target - arr[i];
+
+						if (sum.containsKey(required)) {
+							ans[0] = sum.get(required);
+							ans[1] = i;
 						}
-						while (sum > k && i <= j) {
-							sum = sum - arr[i];
-							i++;
-						}
-						j++;
+						sum.put(arr[i], i);
 					}
 
-					return maxLength;
+					System.out.println(ans[0] + " " + ans[1]);
 				}
-				TimeComplexity -> O(n)
-				SpaceComplexity -> O(1)
+			
+			*Optimal approach -> Using Two pointer approach but works for sorted arrays
+				TimeComplexity -> O(N) + O(N logN)for sorting
+				SpaceComplexity -> O(N) for storing sorted array
+				public static void TwoSumEqualToTargetKUsing2Pointer(int arr[], int target) {
+					int sum = 0, left = 0, right = arr.length - 1;
+					while (left < right) {
+						sum = arr[left] + arr[right];
+						if (sum == target) {
+							System.out.println("Sum match found" + left + " " + right);
+							left++;
+						} else if (sum > target) {
+							right--;
+						} else if (sum < target) {
+							left++;
+						}
+					}
 
+				}
+
+		Sort an Array of 0s,1s and 2s ->
+			Brute force approach -> using sorting Merge sort
+				TimeComplexity - > O(nlogN)
+				SpaceComplexity -> O(N)
+			
+			Better approach -> calcualte the numbers of 0s,1s,2s and add them by looping 
+				TimeComplexity -> O(N+N)=O(2N)
+				SpaceComplexity -> O(1)
+				  public static void merge012s(int arr[]) {
+						int zeroes = 0, ones = 0, twos = 0;
+						for (int i = 0; i < arr.length; i++) {
+							if (arr[i] == 0) {
+								zeroes++;
+							} else if (arr[i] == 1) {
+								ones++;
+							} else {
+								twos++;
+							}
+						}
+
+						System.out.println("z o t " + zeroes + ones + twos);
+						for (int i = 0; i < zeroes; i++) {
+							arr[i] = 0;
+						}
+						for (int i = zeroes; i < (zeroes + ones); i++) {
+							arr[i] = 1;
+						}
+						for (int i = zeroes + ones; i < (zeroes + ones + twos); i++) {
+							arr[i] = 2;
+						}
+						logArray(arr);
+					}
+		
+			Optimal approach -> Using Dutch National Flag Algorithm (DNF Algorithm)
+				TimeComplexity -> O(N+N)=O(N)
+				SpaceComplexity -> O(1)
+				It uses three pointers
+				public static void dutchNationFlagAlgorithm(int arr[]) {
+					int low = 0, mid = 0, high = arr.length - 1;
+					while (mid <= high) {
+
+						if (arr[mid] == 0) {
+							swap(arr, mid, low);
+							low++;
+							mid++;
+						}
+						else if (arr[mid] == 1) {
+							mid++;
+						}
+						else if (arr[mid] == 2) {
+							swap(arr, mid, high);
+							high--;
+						}
+					}
+					logArray(arr);
+				}
+
+		Majority Element > N/2 times ->
+			1. Brute force approach ->
+				TimeComplexity -> O(N^2)
+				SpaceComplexity -> O(1)
+				using nested Loops
+					public static int majorityElementNBy2(int arr[]) {
+					for (int i = 0; i < arr.length; i++) {
+						int count = 0;
+						for (int j = 0; j < arr.length; j++) {
+							if (arr[j] == arr[i]) {
+								count++;
+							}
+						}
+						if (count > arr.length / 2) {
+							return arr[i];
+						}
+					}
+					return -1;
+				} 
+			
+			2. Better approach -> 
+				using hashing
+				TimeComplexity -> O(N+N) => O(2N)
+				SpaceComplexity -> O(N)
+				public static int majorityElementNBy2UsingHashing(int arr[]) {
+					HashMap<Integer, Integer> freq = new HashMap<>();
+					for (int i = 0; i < arr.length; i++) {
+						if (freq.containsKey(arr[i])) {
+							freq.put(arr[i], freq.get(arr[i]) + 1);
+						} else {
+							freq.put(arr[i], 1);
+						}
+					}
+					System.out.println(freq);
+					for (Map.Entry<Integer, Integer> it : freq.entrySet()) {
+						if (it.getValue() > (arr.length / 2)) {
+							return it.getKey();
+						}
+					}
+					return -1;
+				}
+
+			3. Optimal approach -> using Moore's voting Algorithm
+
+				TimeComplexity ->O(N) or O(2N)
+				SpaceComplexity -> O(1)
+				public static void mooreVotingAlgorithm(int arr[]) {
+					int count = 0;
+					int element = 0;
+					for (int i = 0; i < arr.length; i++) {
+						if (count == 0) {
+							count = 1;
+							element = arr[i];
+						} else if (arr[i] != element) {
+							count--;
+						} else if (arr[i] == element) {
+							count++;
+						}
+					}
+
+					// if given that the array contains majority element this step is not required
+					int count1 = 0;
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i] == element) {
+							count1++;
+						}
+					}
+					if (count1 > arr.length / 2) {
+						System.out.println("Majority element is " + element);
+					} else {
+						System.out.println("No majority element");
+					}
+				}
+
+		Maximum subarray sum / Kadane's Algorithm ->
+			1. Brute force approach ->
+				TimeComplexity -> O(N)
+				SpaceComplexity -> O(1)
+				two loops same as Longest subarray with Sum k
+			
+			2. Optimal approach -> Kadane's Algorithm
+				TimeComplexity -> O(N)
+				SpaceComplexity -> O(1)
+				public static void KadaneAlgorithm(int arr[]) {
+					int max = 0, sum = 0, start = 0, startIndex = -1, endIndex = -1;
+
+					for (int i = 0; i < arr.length; i++) {
+						if (sum == 0) {
+							start = i;
+						}
+						
+						sum += arr[i];
+
+						if (sum > max) {
+							max = sum;
+							startIndex = start;
+							endIndex = i;
+						}
+						
+						if (sum < 0) {
+							sum = 0;
+						}
+					}
+					System.out.println("Maximum subarray sum is " + max);
+					System.out.println("Start index and end index is" + startIndex + " " + endIndex);
+				}
+		
+		Best time to Buy & Sell stocks ->
+			First you need to buy and then sell the stock and can be done only once
+				Optimal approach ->
+				TimeComplexity -> O(N)
+				SpaceComplexity -> O(1)
+				public static void buySellStocks(int arr[]) {
+
+					int min = arr[0], profit = 0, cost = 0;
+
+					for (int i = 1; i < arr.length; i++) {
+
+						cost = arr[i] - min;
+						profit = Math.max(cost, profit);
+						min = Math.min(min, arr[i]);
+					}
+					System.out.println("Maximum profitn is " + profit);
+				}
+
+		Rearrange array elements by sign ->
+			constraints array must start with positive values
+			array is of even size
+			array contains equalt number of positives and negatives
+
+			1. Brute force approach ->
+				TimeComplexity -> O(N + N/2)
+				SpaceComplexity -> O(N/2 +N/2) = O(N)
+				public static void rearrangeArray(int arr[]) {
+					// [3,1,-2,-5,2,-4]
+					List<Integer> pos = new ArrayList<>();
+					List<Integer> neg = new ArrayList<>();
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i] > 0) {
+							pos.add(arr[i]);
+						} else {
+							neg.add(arr[i]);
+						}
+					}
+
+					for (int i = 0; i < arr.length / 2; i++) {
+						arr[2 * i] = pos.get(i);
+						arr[2 * i + 1] = neg.get(i);
+					}
+					logArray(arr);
+				}
+				2. Optimal approach ->
+					TimeComplexity -> O(N)
+					SpaceComplexity -> O(N)
+				 public static void rearrangeArrayOptimal(int arr[]) {
+
+					int ans[] = new int[arr.length];
+					// [3,1,-2,-5,2,-4]
+					int pos = 0;
+					int neg = 1;
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i] > 0) {
+							ans[pos] = arr[i];
+							pos += 2;
+						} else {
+							ans[neg] = arr[i];
+							neg += 2;
+						}
+					}
+					logArray(ans);
+				}
+
+				TimeComplexity -> O(2N)
+				SpaceComplexity -> O(N)
+				public static void rearrangeArrayPosNotEqualToNeg(int arr[]) {
+					// [3,1,-2,-5,2,-4,6,8]
+					// [3,1,2,6,8]
+					// [-2,-5,-4]
+					// 3 , -2,1,-5,2,-4
+					List<Integer> pos = new ArrayList<>();
+					List<Integer> neg = new ArrayList<>();
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i] > 0) {
+							pos.add(arr[i]);
+						} else {
+							neg.add(arr[i]);
+						}
+					}
+
+					if (pos.size() > neg.size()) {
+						int index = 0;
+						for (int i = 0; i < neg.size(); i++) {
+							arr[2 * i] = pos.get(i);
+							arr[2 * i + 1] = neg.get(i);
+							index++;
+						}
+						for (int i = neg.size(); i < pos.size(); i++) {
+							arr[index] = pos.get(i);
+						}
+					} else {
+						int index = 0;
+						for (int i = 0; i < pos.size(); i++) {
+							arr[2 * i] = neg.get(i);
+							arr[2 * i + 1] = pos.get(i);
+							index++;
+						}
+						for (int i = pos.size(); i < neg.size(); i++) {
+							arr[index] = neg.get(i);
+						}
+					}
+					logArray(arr);
+				}
