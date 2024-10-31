@@ -1,6 +1,9 @@
 package Arrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,8 +224,9 @@ public class ArraysMedium {
     }
 
     public static void KadaneAlgorithm(int arr[]) {
-        int max = 0, sum = 0, start = 0, startIndex = -1, endIndex = -1;
-
+        int max = Integer.MIN_VALUE;
+        int sum = 0, start = 0, startIndex = -1, endIndex = -1;
+        System.out.println(max);
         for (int i = 0; i < arr.length; i++) {
             if (sum == 0) {
                 start = i;
@@ -333,10 +337,102 @@ public class ArraysMedium {
         logArray(arr);
     }
 
+    public static void generateSubArrays(int arr[]) {
+        // 1 2 3
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i; j < arr.length; j++) {
+                System.out.print(arr[j] + " ");
+            }
+            System.out.println("");
+        }
+    }
+
+    public static int[] nextPermutation(int arr[]) {
+
+        int breakPoint = -1;
+        int i = arr.length - 1;
+
+        // 1. Search the breakPoint where arr[i]<arr[i+1] i.e arr[1]<arr[2] then
+        // breakpoint will be index 1
+        while (i > 0) {
+            if (arr[i - 1] < arr[i]) {
+                breakPoint = i - 1;
+                break;
+            }
+            i--;
+        }
+        // if breakpoint doesn't exists then it means it has the largest possible
+        // combination,
+        // so just reverse the array and return it
+        if (breakPoint == -1) {
+            reverseArray(arr, 0, arr.length - 1);
+            return arr;
+        }
+
+        // 2. Now search for the element which is greater then the breakpoint element
+        // and swap it
+        for (int j = arr.length - 1; j > breakPoint; j--) {
+            if (arr[j] > arr[breakPoint]) {
+                swap(arr, breakPoint, j);
+                break;
+            }
+        }
+
+        // 3. Now reverse the array from breakpoint to the right
+
+        reverseArray(arr, breakPoint + 1, arr.length - 1);
+        logArray(arr);
+        return arr;
+    }
+
+    public static void reverseArray(int[] arr, int start, int end) {
+
+        while (start <= end) {
+            swap(arr, start, end);
+            start++;
+            end--;
+        }
+    }
+
+    public static ArrayList<Integer> leadersInArray(int arr[]) {
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        if (arr.length == 0) {
+            return ans;
+        } else {
+            ans.add(arr[arr.length - 1]);
+        }
+
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] >= ans.get(ans.size() - 1)) {
+                ans.add(arr[i]);
+            }
+        }
+        Collections.reverse(ans);
+        return ans;
+    }
+
+    public static void longestConsecutiveSubsequence(int arr[]) {
+        int count = 0, lastSmaller = Integer.MIN_VALUE, longest = 0;
+        Arrays.sort(arr);
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] - 1 == lastSmaller) {
+                count++;
+                lastSmaller = arr[i];
+            } else if (arr[i] != lastSmaller) {
+                count = 1;
+                lastSmaller = arr[i];
+            }
+            longest = Math.max(longest, count);
+        }
+        System.out.println("longest subsequence is " + longest);
+    }
+
     public static void main(String[] args) {
 
         int arr1[] = { 3, 1, -2, -5, 2, 4 };
-        int arr2[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+        int arr2[] = { 1, 100, 102, 103, 104, 105, 2, 3, 4, 101 };
         logArray(arr1);
         logArray(arr2);
 
@@ -350,10 +446,15 @@ public class ArraysMedium {
         // majorityElementNBy2UsingHashing(arr2));
         // mooreVotingAlgorithm(arr2);
         // maximumSubArraySum(arr2);
-        // KadaneAlgorithm(arr2);
+        // generateSubArrays(arr2);
         // buySellStocks(arr1);
         // rearrangeArray(arr1);
-        rearrangeArrayPosNotEqualToNeg(arr1);
+        // rearrangeArrayPosNotEqualToNeg(arr1);
+        // System.out.println("Reverse Array is ");
+        // reverseArray(arr1, 0, arr1.length-1);
+        // System.out.println("Next Permutation is " + nextPermutation(arr2));
+        // System.out.println("Leaders in an Array " + leadersInArray(arr2));
+        longestConsecutiveSubsequence(arr2);
     }
 
 }
