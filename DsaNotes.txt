@@ -1056,7 +1056,7 @@
 			Optimal approach ->
 				1. Search the breakPoint where arr[i]<arr[i+1] i.e arr[1]<arr[2] then
 					breakpoint will be index 1
-				2. Iif breakpoint doesn't exists then it means it has the largest possible combination,
+				2. If breakpoint doesn't exists then it means it has the largest possible combination,
 					so just reverse the array and return it
 				3. Now search for the element which is greater then the breakpoint element
 					and swap it
@@ -1146,3 +1146,226 @@
 			}
 			TimeComplexity -> O(nLogN)+O(N)
 			SpaceComplexity -> O(1)
+
+		Set Matrix Zero ->
+			When a zero is encountered set its row and col element as 0
+
+				Brute force approach ->
+					Loop and if zero is encountered replace its row and col with -1
+					then traverse the matrix again and set -1 as 0
+					TimeComplexity -> O(n^3)
+				
+				Better approach -> using two arrays of size m and N
+					if element is 0 mark its row and col and 1 
+					reiterate and if the row/col is marked as 1 replace it with 0
+					TimeComplexity -> O(2 * n * m)
+					SpaceComplexity -> O(n)+O(m)
+
+				Optimal approach ->
+					public class Main {
+						static ArrayList<ArrayList<Integer>> zeroMatrix(ArrayList<ArrayList<Integer>> matrix, int n, int m) {
+							// int[] row = new int[n]; --> matrix[..][0]
+							// int[] col = new int[m]; --> matrix[0][..]
+							int col0 = 1;
+							// step 1: Traverse the matrix and
+							// mark 1st row & col accordingly:
+							for (int i = 0; i < n; i++) {
+								for (int j = 0; j < m; j++) {
+									if (matrix.get(i).get(j) == 0) {
+										// mark i-th row:
+										matrix.get(i).set(0, 0);
+
+										// mark j-th column:
+										if (j != 0)
+											matrix.get(0).set(j, 0);
+										else
+											col0 = 0;
+									}
+								}
+							}
+
+							// Step 2: Mark with 0 from (1,1) to (n-1, m-1):
+							for (int i = 1; i < n; i++) {
+								for (int j = 1; j < m; j++) {
+									if (matrix.get(i).get(j) != 0) {
+										// check for col & row:
+										if (matrix.get(i).get(0) == 0 || matrix.get(0).get(j) == 0) {
+											matrix.get(i).set(j, 0);
+										}
+									}
+								}
+							}
+							//step 3: Finally mark the 1st col & then 1st row:
+							if (matrix.get(0).get(0) == 0) {
+								for (int j = 0; j < m; j++) {
+									matrix.get(0).set(j, 0);
+								}
+							}
+							if (col0 == 0) {
+								for (int i = 0; i < n; i++) {
+									matrix.get(i).set(0, 0);
+								}
+							}
+
+							return matrix;
+						}
+
+						public static void main(String[] args) {
+							ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+							matrix.add(new ArrayList<>(Arrays.asList(1, 1, 1)));
+							matrix.add(new ArrayList<>(Arrays.asList(1, 0, 1)));
+							matrix.add(new ArrayList<>(Arrays.asList(1, 1, 1)));
+
+							int n = matrix.size();
+							int m = matrix.get(0).size();
+
+							ArrayList<ArrayList<Integer>> ans = zeroMatrix(matrix, n, m);
+
+							System.out.println("The Final matrix is: ");
+							for (ArrayList<Integer> row : ans) {
+								for (Integer ele : row) {
+									System.out.print(ele + " ");
+								}
+								System.out.println();
+							}
+						}
+					}
+					TimeComplexity -> O(2*n*m)
+					SpaceComplexity -> O(1)
+
+		Rotate matrix by 90 deg ->
+			Brute force approach ->
+				for (int i = 0; i < m; i++) {
+					for (int j = 0; j < n; j++) {
+						arr2[j][n - 1 - i] = arr[i][j];
+					}
+				}
+				TimeComplexity -> O(n^2)
+				SpaceComplexity -> O(n^2)
+			
+			Better approach ->
+				using Transpose and then Reversing
+				 for (int i = 0; i < m; i++) {
+					for (int j = 0; j < n; j++) {
+						if (i != j) {
+							// swap
+							int t = arr[i][j];
+							arr[i][j] = arr[j][i];
+							arr[j][i] = t;
+						}
+					}
+				}
+
+				TimeComplexity -> O(N)
+				SpaceComplexity -> O(1)
+
+		Spiral Array output ->
+			Optimal approach ->
+			TimeComplexity ->O(n*m)
+			SpaceComplexity -> O(1)
+				int top = 0, bottom = arr.length - 1, left = 0, right = arr[0].length - 1;
+				System.out.println(top + "" + bottom + "" + left + "" + right);
+
+				while (left <= right && top <= bottom) {
+					// left to right keeping top constant
+					for (int i = left; i <= right; i++) {
+						System.out.print(arr[top][i] + " ");
+					}
+					top++;
+					// top to bottom keeping right constant
+					for (int i = top; i <= bottom; i++) {
+						System.out.print(arr[i][right] + " ");
+					}
+					right--;
+
+					if (top <= bottom) {
+						// right to left keeping bottom constant
+						for (int i = right; i >= left; i--) {
+							System.out.print(arr[bottom][i] + " ");
+						}
+						bottom--;
+					}
+					if (left <= right) {
+						// bottom to top keeping left constant
+						for (int i = bottom; i >= top; i--) {
+							System.out.print(arr[i][left] + " ");
+						}
+						left++;
+					}
+				}
+
+		Pascal's Triangle ->
+			To find the element of given Row and Col we use nCr
+			Row-1 C col-1
+			
+			Optimal approach ->
+				TimeComplexity -> O(r)
+				public static int ncr(int n, int r) {
+					int ans = 1;
+					for (int i = 0; i < r; i++) {
+						ans = ans * (n - i);
+						ans = ans / (i + 1);
+					}
+					return ans;
+				}
+				TimeComplexity -> O(N)
+				public static void printRowOfPascalTraiangle(int rows) {
+					int ans = 1;
+					if (rows == 1) {
+						System.out.println(ans + " ");
+						return;
+					}
+					System.out.print(ans + " ");
+					for (int i = 1; i < rows; i++) {
+						ans = ans * (rows - i);
+						ans = ans / (i);
+						System.out.print(ans + " ");
+					}
+					System.out.println("");
+				}
+
+				public static void pascalsTriangle(int rowLength) {
+
+					for (int i = 1; i <= rowLength; i++) {
+						printRowOfPascalTraiangle(i);
+					}
+				}
+
+		
+		3Sum Problem ->
+
+			Brute force approach -> 
+				using three loops and generating all possible combinations of subarrays
+				TimeComplexity -> O(N^3)
+				SpaceComplexity -> O(1)
+
+			Optimal approach -> Using two pointer method
+			* Works when array is sorted
+				TimeComplexity -> O(n^2)+O(nLogN)
+				SpaceComplexity -> O(1)
+
+				public static void threeSum(int arr[], int target) {
+					int sum = 0;
+					Arrays.sort(arr);
+					for (int i = 0; i < arr.length; i++) {
+						if (i != 0 && arr[i] == arr[i - 1])
+							continue;
+						int j = i + 1, k = arr.length - 1;
+						while (j < k) {
+							sum = arr[i] + arr[j] + arr[k];
+							if (sum > target) {
+								k--;
+							} else if (sum < target) {
+								j++;
+							} else {
+								System.out.println("Elements are [" + arr[i] + " " + arr[j] + " " + arr[k] + "]");
+								j++;
+								k--;
+								while (j < k && arr[j] == arr[j - 1])
+									j++;
+								while (j < k && arr[k] == arr[k + 1])
+									k--;
+							}
+						}
+					}
+				}

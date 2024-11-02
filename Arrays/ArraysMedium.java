@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ArraysMedium {
     public static void swap(int arr[], int a, int b) {
@@ -429,10 +430,154 @@ public class ArraysMedium {
         System.out.println("longest subsequence is " + longest);
     }
 
+    public static void twoDimensionalArray() {
+
+        int arr[][] = new int[3][3];
+        int m = arr.length;
+        int n = arr[0].length;
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print("Enter a number ");
+                arr[i][j] = sc.nextInt();
+            }
+        }
+        sc.close();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (i != j) {
+                    // swap
+                    int t = arr[i][j];
+                    arr[i][j] = arr[j][i];
+                    arr[j][i] = t;
+                }
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void spiralArray() {
+
+        int arr[][] = new int[3][4];
+        int m = arr.length;
+        int n = arr[0].length;
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print("Enter a number ");
+                arr[i][j] = sc.nextInt();
+            }
+        }
+        sc.close();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        int top = 0, bottom = arr.length - 1, left = 0, right = arr[0].length - 1;
+        System.out.println(top + "" + bottom + "" + left + "" + right);
+
+        while (left <= right && top <= bottom) {
+            // left to right keeping top constant
+            for (int i = left; i <= right; i++) {
+                System.out.print(arr[top][i] + " ");
+            }
+            top++;
+            // top to bottom keeping right constant
+            for (int i = top; i <= bottom; i++) {
+                System.out.print(arr[i][right] + " ");
+            }
+            right--;
+
+            if (top <= bottom) {
+                // right to left keeping bottom constant
+                for (int i = right; i >= left; i--) {
+                    System.out.print(arr[bottom][i] + " ");
+                }
+                bottom--;
+            }
+            if (left <= right) {
+                // bottom to top keeping left constant
+                for (int i = bottom; i >= top; i--) {
+                    System.out.print(arr[i][left] + " ");
+                }
+                left++;
+            }
+        }
+    }
+
+    public static void countOfSubarraysWithSumEqualsK(int arr[], int k) {
+        HashMap<Integer, Integer> sumMap = new HashMap<>();
+        int count = 0;
+        int sum = 0;
+        sumMap.put(0, 1);
+        for (int i = 0; i < arr.length; i++) {
+
+            sum += arr[i];
+
+            count += sumMap.getOrDefault(sum - k, 0);
+
+            sumMap.put(sum, sumMap.getOrDefault(sum, 0) + 1);
+        }
+        System.out.println("Number of subarrays are " + count);
+
+    }
+
+    public static void setMatrixZero(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        System.out.println(row + " " + col);
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (matrix[i][j] == 0) {
+                    for (int k = 0; k < row; k++) {
+                        matrix[i][k] = -1;
+                    }
+                    for (int k = 0; k < col; k++) {
+                        matrix[k][j] = -1;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (matrix[i][j] == -1) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public static void main(String[] args) {
 
         int arr1[] = { 3, 1, -2, -5, 2, 4 };
-        int arr2[] = { 1, 100, 102, 103, 104, 105, 2, 3, 4, 101 };
+        int arr2[] = { 3, -3, 1, 1, 1 };
         logArray(arr1);
         logArray(arr2);
 
@@ -454,7 +599,21 @@ public class ArraysMedium {
         // reverseArray(arr1, 0, arr1.length-1);
         // System.out.println("Next Permutation is " + nextPermutation(arr2));
         // System.out.println("Leaders in an Array " + leadersInArray(arr2));
-        longestConsecutiveSubsequence(arr2);
+        // longestConsecutiveSubsequence(arr2);
+        // twoDimensionalArray();
+        // spiralArray();
+        // countOfSubarraysWithSumEqualsK(arr2, 3);
+
+        int[][] zero = new int[2][2];
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < zero.length; i++) {
+            for (int j = 0; j < zero[0].length; j++) {
+                System.out.print("Enter a number ");
+                zero[i][j] = sc.nextInt();
+            }
+        }
+        sc.close();
+        setMatrixZero(zero);
     }
 
 }
