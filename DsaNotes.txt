@@ -332,7 +332,7 @@
 				TimeComplexity -> O(N)
 				SpaceComplexity -> O(1)
 
-		Rotate Array ->
+		Left Rotate Array ->
 			Left rotate by one place ->
 				public static void leftRotateArrayByOne(int arr[]) {
 					int temp = arr[0];
@@ -1519,3 +1519,204 @@
 				Arrays.sort(nums1);
 				Arrays.sort(nums2);
 			}
+
+9. Binary Search ->
+		Used to search number in a SORTED array
+		*Overflow would be when we are at last element , here mid will be
+			int mid= (Integer.MAX_VALUE+Integer.MAX_VALUE)/2 which will Overflow
+			to solve this either use long low, mid, high
+			or use int mid=low+(hgih-low)/2
+		1. Using loop ->
+			TimeComplexity -> O(logN)
+			SpaceComplexity -> O(1)
+			public static int binarySearch(int arr[], int k) {
+				int low = 0, high = arr.length - 1;
+				while (low <= high) {
+					int mid = (low + high) / 2;
+					if (arr[mid] == k) {
+						return mid;
+					} else if (arr[mid] > k) {
+						high = mid-1;
+					} else {
+						low = mid + 1;
+					}
+				}
+				return -1;
+			}
+
+		2. Using recursion ->
+			TimeComplexity -> O(logN)
+			SpaceComplexity -> O(1)
+			public static int binarySearchUsingRecursion(int arr[], int low, int high, int k) {
+				if (low >= high) {
+					return -1;
+				}
+				int mid = (low + high) / 2;
+				if (arr[mid] == k) {
+					return mid;
+				} else if (arr[mid] < k) {
+					return binarySearchUsingRecursion(arr, low, mid - 1, k);
+				} else {
+					return binarySearchUsingRecursion(arr, mid + 1, high, k);
+				}
+			}
+		3. Types of Questions ->
+			Lower Bound ->
+				* smallest index where Arr[index] >= x then it can be my ans but it must be at index lowest
+				 public static int binarySearchLowerBound(int arr[], int k) {
+					int low = 0, high = arr.length - 1;
+					int ans = arr.length;
+					while (low <= high) {
+						int mid = (low + high) / 2;
+						if (arr[mid] >= k) {
+							ans = mid;
+							high = mid - 1;
+						} else {
+							low = mid + 1;
+						}
+					}
+					return ans;
+				}
+
+			Upper Bound ->
+				* smallest index where Arr[index] > x\
+			
+			First Occurence ->
+				public static int binarySearchFirstOccurence(int arr[], int target) {
+					int low = 0, high = arr.length - 1;
+					int first = -1;
+					while (low <= high) {
+						int mid = (low + high) / 2;
+						if (arr[mid] == target) {
+							first = mid;
+							high = mid - 1;
+						} else if (arr[mid] < target) {
+							low = mid + 1;
+						} else {
+							high = mid - 1;
+						}
+					}
+				
+			Last Occurence ->
+				public static int binarySearchLastOccurence(int arr[], int target) {
+					int low = 0, high = arr.length - 1;
+					int last = -1;
+					while (low <= high) {
+						int mid = (low + high) / 2;
+						if (arr[mid] == target) {
+							last = mid;
+							low = mid + 1;
+						} else if (arr[mid] < target) {
+							low = mid + 1;
+						} else {
+							high = mid - 1;
+						}
+					}
+					System.out.println("Last occurence of " + target + " is " + last);
+					return last;
+				}
+
+			Search in Sorted Rotated array ->
+				* Eliminate sorted half and reduce the array
+				TimeComplexity -> O(logn)
+				 public static int searchInSortedRotatedArrayUsingBinarySearch(int arr[], int target) {
+					int low = 0, high = arr.length - 1;
+					while (low <= high) {
+						int mid = (low + high) / 2;
+						if (arr[mid] == target) {
+							return mid;
+						}
+						// identify the sorted half
+						// if left half is sorted
+						else if (arr[low] <= arr[mid]) {
+							if (arr[low] <= target && target <= arr[mid]) {
+								high = mid - 1;
+							} else {
+								low = mid + 1;
+							}
+						}
+						// if right half is sorted
+						else {
+							if (arr[mid] <= target && target <= arr[high]) {
+								high = mid - 1;
+							} else {
+								low = mid + 1;
+							}
+						}
+					}
+					return -1;
+				}
+				*If elements repeat then shrink the boundary
+					extend low and reduce high
+					if (arr[low] == arr[mid] && arr[mid] == arr[high]) {
+						low = low + 1;
+						high = high - 1;
+						continue;
+					}
+			
+			Minimum in sorted array ->
+				Search the sorted portion and choose the minimum and eleminate that half
+				public static int mimimumInSortedArrayUsingBinarySearch(int arr[]) {
+					int low = 0, high = arr.length - 1, ans = Integer.MAX_VALUE;
+
+					while (low <= high) {
+						int mid = (low + high) / 2;
+
+						// When we get a sorted portion no need to again divide the array in two halves
+						if(arr[low]<=arr[high]){
+							ans=Math.min(ans,arr[low]);
+							break;
+						}
+						if (arr[low] <= arr[mid]) {
+							ans = Math.min(ans, arr[low]);
+							low = mid + 1;
+						} else {
+							ans = Math.min(ans, arr[mid]);
+							high = mid - 1;
+						}
+					}
+					return ans;
+				}
+
+			Single element in Sorted array ->
+				1,1,2,2,3,3,4,5,5,6,6
+				ans is 4
+				*Observations - 
+					left half -> index pairs -(even,odd) & element is in right half
+					right half -> index pairs -(odd,even) & element is in left half
+			
+			Peak element ->
+				*Observations ->
+					for peak element left -> has increasing order
+					peak element right has decreasing order
+
+					if we are in left half then element is in right half vice versa
+				public static int peakElement(int arr[]) {
+
+					int n = arr.length - 1;
+					int low = 0, high = n - 2;
+
+					if (n == 1) {
+						return arr[0];
+					}
+					if (arr[0] > arr[1]) {
+						return arr[0];
+					}
+					if (arr[n - 1] > arr[n - 2]) {
+						return arr[n - 1];
+					}
+
+					while (low <= high) {
+						int mid = (low + high) / 2;
+						if (arr[mid] < arr[mid - 1] && arr[mid] > arr[mid + 1]) {
+							return arr[mid];
+						}
+						// left half has increasing order
+						else if (arr[mid - 1] > arr[mid]) {
+							low = mid + 1;
+						} else {
+							high = mid - 1;
+						}
+					}
+					return -1;
+				}
